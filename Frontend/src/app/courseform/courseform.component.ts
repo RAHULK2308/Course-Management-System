@@ -27,8 +27,8 @@ export class CourseformComponent implements OnInit {
   newcourse(){
     this.service.newCourse(this.course);
     Swal.fire({
-      title: 'accepted',
-      text: 'Do you want to continue',
+      title: 'Added',
+      text: 'Successfully Added',
       icon: 'success',
       confirmButtonText: 'OK'
     })
