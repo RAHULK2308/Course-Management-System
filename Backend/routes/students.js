@@ -1,6 +1,8 @@
 const express=require('express');
 const router=express.Router();
 const formdata=require('../models/studentform')
+const jwt=require('jsonwebtoken');
+const nodemailer=require('nodemailer')
 
 router.post('/register',(req,res)=>{
     var studentform = {       
@@ -20,7 +22,21 @@ router.post('/register',(req,res)=>{
    
 })
 
-router.put('/reject',(req,res)=>{
+function verifyToken(req, res, next) {
+    if(!req.headers.authorization) {
+      return res.status(401).send('Unauthorized request')
+    }
+    let token = req.headers.authorization.split(' ')[1]
+    if(token === 'null') {
+      return res.status(401).send('Unauthorized request')    
+    }
+    let payload = jwt.verify(token, 'secretKey')
+    if(!payload) {
+      return res.status(401).send('Unauthorized request')     }
+    req.userId = payload.subject
+    next()}
+
+router.put('/reject',verifyToken,(req,res)=>{
     id=req.body._id,
   
     formdata.findByIdAndUpdate({"_id":id},
@@ -36,9 +52,11 @@ router.put('/reject',(req,res)=>{
 
 function checklimit(req,res,next){
     const course=req.body.course;
-    formdata.count({"course":course})
+    formdata.count({"course":course,"status":"accepted"})
     .then(data=>{
-        if(data<=4){
+       
+        if(data<=40){
+            
             res.send();
             next();
         }else{
@@ -49,7 +67,7 @@ function checklimit(req,res,next){
     
 }
 
-router.put('/update',checklimit,(req,res)=>{
+router.put('/update',verifyToken,checklimit,(req,res)=>{
     // console.log(req.body)
     id=req.body._id,
   
@@ -58,7 +76,7 @@ router.put('/update',checklimit,(req,res)=>{
                                 }})
    .then(function(){
        
-       res.send("Accepted");
+       res.send();
    })
    
 })
@@ -68,6 +86,59 @@ router.get('/',(req,res)=>{
    .then(data=>{
        res.send(data)
    })
+
+})
+
+router.get('/acceptedlist',(req,res)=>{
+    const accept="accepted"
+    formdata.find({status: accept})
+    .then(data=>{
+        
+        res.send(data)
+    //    console.log('data send')
+    })
+})
+
+
+router.post('/sendmail',(req,res)=>{
+    
+    const course=req.body.course;
+    
+    const accept="accepted"
+    formdata.find({course:course,status:accept}, function(err, allUsers){
+        if(err){
+            console.log(err);
+        }
+        var mailList = [];
+        allUsers.forEach(function(users){
+            mailList.push(users.email);
+            return mailList;
+        });
+        var smtpTransport = nodemailer.createTransport({
+            service: 'Gmail', 
+            auth: {
+                user: 'rahulkm4002@gmail.com',
+                pass: "pjhcobyrcrdrcvya"
+            }
+        });
+        var mailOptions = {
+                to: [],
+                bcc: mailList,
+                from: 'rahulkm4002@gmail.com',
+                subject: 'Form Accepted',
+                html: '<h1>Congratulations..! </h1> \n<h4> This mail is sent from the course management system. Your application is Accepted</h4>'
+            };
+            smtpTransport.sendMail(mailOptions, function(err) {
+                if(err){
+                    // console.log(err);
+                    res.status(401).send( "We seem to be experiencing issues. Please try again later.");
+                    // res.redirect("/");
+                }else{
+                    res.send()
+                console.log('mail sent to ' + mailList);
+                }
+            });
+    });
 })
 
 module.exports=router;

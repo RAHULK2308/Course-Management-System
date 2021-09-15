@@ -34,5 +34,13 @@ export class StudentService {
     return this.http.put("http://localhost:3000/students/reject",user)
     
    }
+
+   acceptedstudentlist(){
+     return this.http.get("http://localhost:3000/students/acceptedlist");
+   }
+
+   getToken(){
+    return localStorage.getItem('token') 
+  }
 }
 

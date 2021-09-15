@@ -1,7 +1,13 @@
 .main{
-    margin: 30px;
+    margin: 60px;
+    padding: 20px;
+    border: 1px solid black;
+    
 }
 
+.second{
+    margin: 10px;
+}
 h4{
     margin-bottom: 50px;
 }

@@ -21,4 +21,9 @@ export class ProfessorService {
   getCourse(){
     return this.http.get("http://localhost:3000/course")
   }
+  sendmailto(items:any){
+    
+    return this.http.post('http://localhost:3000/students/sendmail',{"course":items})
+     
+  }
 }

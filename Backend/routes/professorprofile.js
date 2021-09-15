@@ -1,43 +1,74 @@
 const express=require('express');
 const router=express.Router();
 const Professorsdata=require('../models/professor')
+const jwt=require('jsonwebtoken')
+let bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 router.get('/',(req,res)=>{
     res.send('welcome user')
 })
 
-router.post('/signup',(req,res)=>{
-    console.log(req.body);
+function checkemail(req,res,next){
+    email = req.body.professor.email;
+    Professorsdata.findOne({email:email})
+    .then(data=>{
+        if(data){
+            res.status(401).send("email already exist")
+        }else{
+            next()
+        }
+    })
+}
+
+router.post('/signup',checkemail,(req,res)=>{
+    const hash = bcrypt.hashSync(req.body.professor.password, saltRounds);
    
     var Professor = {       
         name : req.body.professor.uname,
         email : req.body.professor.email,
         qulification : req.body.professor.qulification,
         experience : req.body.professor.experience,
-        password : req.body.professor.password
+        password :hash
    }       
    var data = new Professorsdata(Professor);
    data.save();
    console.log('saved')
+   res.send();
+})
+
+router.get('/profile/:email',(req,res)=>{
+    useremail=req.params.email;
+    Professorsdata.findOne({email:useremail})
+    .then(data=>{
+        res.send(data)
+    })
 })
 
 function checkuser(req,res, next){
     useremail=req.body.email;
     userpassword=req.body.password;
-    studentschema.findOne({email:useremail})
+    Professorsdata.findOne({email:useremail})
   .then(function(data){
-    if (useremail==data?.email && userpassword == data?.password){
-        console.log("you are in user")
-        next()}else{
-        res.status(401).send('Invalid Login Attempt')
-      }
+    if(data){
+        result= bcrypt.compareSync(userpassword, data.password);
+              if(result==true){
+                  console.log("true");
+                 next()
+              }else{
+                  res.status(401).send("inavlid login attempt")
+              }
+          }else{
+              res.status(401).send("inavlid login attempt")
+          }
   })
 }
+
 
 router.post('/login',checkuser,(req,res)=>{
     useremail=req.body.email;
     userpassword=req.body.password;
-    let payload = {subject: email+password}
+    let payload = {subject: useremail+userpassword}
     let token = jwt.sign(payload, 'secretKey')
     res.status(200).send({token})  
 })

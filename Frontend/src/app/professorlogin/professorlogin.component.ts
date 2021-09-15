@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthprofessorService } from '../authprofessor.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-professorlogin',
@@ -12,7 +13,7 @@ export class ProfessorloginComponent implements OnInit {
   professor={
     email:'',
   password:''}
-  message=""
+ 
   constructor(private auth:AuthprofessorService, private router:Router) { }
 
   ngOnInit(): void {
@@ -23,12 +24,23 @@ export class ProfessorloginComponent implements OnInit {
     .subscribe(
       res => {
         localStorage.setItem('token', res.token)
-        this.router.navigate(['/'])
-        alert("successfully completed ");
+        Swal.fire({
+          title: 'Success',
+          text: 'Successfully Logged',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        })
+        this.router.navigate(['/courses'])
+        
       },
       err => {
         console.log(err);
-        this.message="Please enter valid email & password"
+        Swal.fire({
+          title: 'Error',
+          text: 'Enter Valid Email And Password',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
         this.router.navigate(['professor'])
       }) 
   }

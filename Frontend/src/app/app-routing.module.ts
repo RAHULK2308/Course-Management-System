@@ -9,6 +9,10 @@ import { CourseformComponent } from './courseform/courseform.component';
 import { StudentsformComponent } from './studentsform/studentsform.component';
 import { StudentslistComponent } from './studentslist/studentslist.component';
 import { CoursedetailsComponent } from './coursedetails/coursedetails.component';
+import { AcceptedComponent } from './accepted/accepted.component';
+import { AuthGuard } from './auth.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfessorprofileComponent } from './professorprofile/professorprofile.component';
 
 const routes: Routes = [
   {path:"", component:HomeComponent},
@@ -16,10 +20,19 @@ const routes: Routes = [
   {path:"studentsignup", component:StudentsignupComponent},
   {path:"professor", component:ProfessorloginComponent},
   {path:"professorsignup",component:ProfessorsignupComponent},
-  {path:"courseform",component:CourseformComponent},
+  {path:"profile",component:ProfileComponent},
+  {path:"professorprofile",component:ProfessorprofileComponent},
+  {path:"courseform",
+  canActivate:[AuthGuard],
+  component:CourseformComponent},
   {path:"apply",component:StudentsformComponent},
-  {path:"studentlist",component:StudentslistComponent},
-  {path:"courses",component:CoursedetailsComponent}
+  {path:"studentlist",
+  canActivate:[AuthGuard],
+  component:StudentslistComponent},
+  {path:"courses",component:CoursedetailsComponent},
+  {path:"accepted",
+  canActivate:[AuthGuard],
+  component:AcceptedComponent}
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2'
 
 
 
@@ -27,10 +27,30 @@ export class StudentsignupComponent implements OnInit {
   AddUser()
   { 
     if(this.student.password==this.student.repeatpassword){   
-    this.auth.newUser(this.student);
-    console.log("Called");    
-    alert("Success");
-    this.router.navigate(['/students']);
+    this.auth.newUser(this.student).subscribe(
+      res => {
+        Swal.fire({
+          title: 'Success',
+          text: 'Successfully Logged',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        })
+        this.router.navigate(['/students']);
+        
+      },
+      err => {
+        console.log(err);
+        Swal.fire({
+          title: 'Error',
+          text: 'Email already exist',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
+        
+      }) 
+          
+   
+    
     }else{
       this.message="Password is incorrect"
     }

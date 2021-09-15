@@ -1,28 +1,41 @@
 
 <nav>
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Course Management System</a>
+      <p  class="brand-logo">Course Management System</p>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li>
-            <a routerLink="/students" >STUDENTS</a>
+            <a routerLink="/" *ngIf="!auth.StudentloggedIn() && !auth.ProfessorloggedIn()">HOME</a>
         </li>
         <li>
-            <a routerLink="/professor" >PROFESSORS</a>
+            <a routerLink="/students" *ngIf="!auth.StudentloggedIn() && !auth.ProfessorloggedIn()">STUDENTS</a>
         </li>
         <li>
-            <a routerLink="/courseform" >ADD COURSE</a>
+            <a routerLink="/professor" *ngIf="!auth.StudentloggedIn() && !auth.ProfessorloggedIn()">PROFESSORS</a>
+        </li>
+      
+        <li>
+            <a routerLink="/courses" *ngIf="auth.ProfessorloggedIn()||auth.StudentloggedIn() " >COURSES</a>
         </li>
         <li>
-            <a routerLink="/apply" >APPLY</a>
+            <a routerLink="/courseform" *ngIf="auth.ProfessorloggedIn()" >ADD COURSE</a>
         </li>
         <li>
-            <a routerLink="/studentlist" >STUDENT LIST</a>
+            <a routerLink="/apply" *ngIf="auth.StudentloggedIn()" >APPLY</a>
         </li>
         <li>
-            <a routerLink="/courses" >COURSES</a>
+            <a routerLink="/studentlist"  *ngIf="auth.ProfessorloggedIn()">STUDENT LIST</a>
         </li>
         <li>
-            <a routerLink="/logout" >LOGOUT</a>
+            <a routerLink="/accepted"  *ngIf="auth.ProfessorloggedIn()">ACCEPTED STUDENTS</a>
+        </li>
+        <li>
+            <a routerLink="/profile"  *ngIf="auth.StudentloggedIn()">PROFILE</a>
+        </li>
+        <li>
+            <a routerLink="/professorprofile"  *ngIf="auth.ProfessorloggedIn()">PROFILE</a>
+        </li>
+        <li>
+            <a routerLink="/logout" *ngIf="auth.ProfessorloggedIn()||auth.StudentloggedIn() " (click)="logout()" >LOGOUT</a>
         </li>
       </ul>
     </div>

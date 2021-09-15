@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../student.service';
 import {Router} from '@angular/router'
-import { error } from '@angular/compiler/src/util';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-studentslist',
@@ -12,9 +12,7 @@ export class StudentslistComponent implements OnInit {
 
   studentdata:any=[]
   status:any="";
-  accepted=true;
-  warning=true;
-  rejected=true;
+ 
   constructor(private service:StudentService, private router:Router) { }
 
   ngOnInit(): void {
@@ -30,17 +28,23 @@ export class StudentslistComponent implements OnInit {
     // console.log(user)
     this.service.accept(user).subscribe(
       (res)=>{
-        this.status="Accepted"
-        this.accepted=false;
-         this.warning=true;
-        this.rejected=true;
+        Swal.fire({
+          title: 'accepted',
+          text: 'Do you want to continue',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        })
+        this.router.navigate(['/studentlist'])
       },
       (error)=>
         {
-          this.status="Over the limit"
-          this.accepted=true;
-          this.warning=false;
-         this.rejected=true;
+          Swal.fire({
+            title: 'Warning',
+            text: 'Over the Limit',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+          })
+          this.router.navigate(['/studentlist'])
         }
     )
   }
@@ -50,10 +54,13 @@ export class StudentslistComponent implements OnInit {
     // console.log(user)
     this.service.reject(user).subscribe(
       (res)=>{
-        this.status="Rejected";
-        this.accepted=true;
-        this.warning=true;
-       this.rejected=false;
+        Swal.fire({
+          title: 'Rejected',
+          text: 'Do you want to continue',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }) 
+        this.router.navigate(['/studentlist'])
       }
      
     )

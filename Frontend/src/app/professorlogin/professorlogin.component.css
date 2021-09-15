@@ -17,3 +17,9 @@ h4{
 .card-body{
     margin-left: 25px;
 }
+
+a{
+    font-size: medium;
+    font-weight: bold;
+    text-decoration: none;
+}

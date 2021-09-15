@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms'
 import { ProfessorService } from '../professor.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'
+
 @Component({
   selector: 'app-courseform',
   templateUrl: './courseform.component.html',
@@ -24,7 +26,12 @@ export class CourseformComponent implements OnInit {
 
   newcourse(){
     this.service.newCourse(this.course);
-    alert('success')
-    this.router.navigate(['/'])
+    Swal.fire({
+      title: 'accepted',
+      text: 'Do you want to continue',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
+    this.router.navigate(['/courses'])
   }
 }

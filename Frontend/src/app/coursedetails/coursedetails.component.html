@@ -15,7 +15,7 @@
         </div>
         <div class="card-action ">
           
-          <a routerLink="/apply" >Apply</a>
+          <a routerLink="/apply"  *ngIf="auth.StudentloggedIn()" >Apply</a>
         </div>
       </div>
     </div>

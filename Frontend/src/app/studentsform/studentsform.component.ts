@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProfessorService } from '../professor.service';
 import { Router } from '@angular/router';
 import { StudentService } from '../student.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-studentsform',
@@ -30,7 +31,12 @@ dob:''
 
   apply(){
     this.student.applyCourse(this.studentdata);
-    alert("Successfully applied...wait for some of days for confirmation")
-    this.router.navigate(['/'])
+    Swal.fire({
+      title: 'Success',
+      text: 'Wait Professor Response',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
+    this.router.navigate(['/courses'])
   }
 }

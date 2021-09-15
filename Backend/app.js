@@ -3,6 +3,7 @@ const cors=require('cors');
 const bodyparser=require('body-parser');
 const mongoose=require('mongoose');
 const confiq=require('./config/database')
+const nodemailer=require('nodemailer')
 
 mongoose.connect(confiq.database);
 
@@ -26,6 +27,7 @@ const professor=require('./routes/professorprofile')
 
 app.use(cors());
 app.use(bodyparser.json());
+
 
 app.use('/users',users)
 app.use('/students',student);

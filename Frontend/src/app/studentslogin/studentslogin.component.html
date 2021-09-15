@@ -11,9 +11,7 @@
           <div class="card-body">
             
             <form   #userLogin="ngForm" (ngSubmit)="loginUser()">
-              <small id="error" class="text-danger">{{message}}</small>
-            <br>
-            <br>
+           
               <div >
                 <label for="Email">Email</label>
                 <input type="email" name="email" id="uname" #email="ngModel" [(ngModel)]="student.email"  pattern="^[a-zA-Z0-9.%+]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}" 
@@ -33,7 +31,7 @@
               <button type="submit" [disabled]="userLogin.form.invalid" class="btn btn-success float-right">Login</button>
             </form>  
             <br>  
-            <p>If you don't have any account ? <a routerLink="/studentsignup">signup</a></p>                         
+            <p>If you don't have any account ? <a routerLink="/studentsignup"> SIGNUP</a></p>                         
           </div>
           <!--/card-block-->
         </div>
